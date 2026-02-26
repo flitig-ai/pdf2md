@@ -1,4 +1,4 @@
-import type { PDFDocumentProxy, DocumentInitParameters, TypedArray, TextItem } from 'pdfjs-dist/types/display/api'
+import type { PDFDocumentProxy, DocumentInitParameters, TypedArray, TextItem } from 'pdfjs-dist/types/src/display/api'
 
 interface Page {
     index: number

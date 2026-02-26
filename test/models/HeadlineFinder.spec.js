@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 
-const HeadlineFinder = require('../../lib/models/HeadlineFinder')
-const LineItem = require('../../lib/models/LineItem')
+const HeadlineFinder = require('../../build/models/HeadlineFinder')
+const LineItem = require('../../build/models/LineItem')
 
 describe('HeadlineFinder', () => {
   it('Not Found - Case 1', () => {
