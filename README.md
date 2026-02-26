@@ -55,6 +55,7 @@ console.log(pages) // string[]
 
 ## Credits
 
-- [@opendocsg/pdf2md](https://www.npmjs.com/package/@opendocsg/pdf2md) - Which is this repo forked from
+- [uniai-lab/pdf2md](https://github.com/uniai-lab/pdf2md) - Which this repo is forked from
+- [@opendocsg/pdf2md](https://www.npmjs.com/package/@opendocsg/pdf2md) - Which uniai-lab/pdf2md was forked from
 - [pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown) - original project by Johannes Zillmann
 - [pdf.js](https://mozilla.github.io/pdf.js/) - Mozilla's PDF parsing & rendering platform which is used as a raw parser
