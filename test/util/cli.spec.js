@@ -2,7 +2,7 @@ const { expect } = require('chai')
 
 const mock = require('mock-fs')
 const rewire = require('rewire')
-const cli = rewire('../../lib/util/cli.js')
+const cli = rewire('../../build/util/cli.js')
 const getFileAndFolderPaths = cli.__get__('getFileAndFolderPaths') // eslint-disable-line no-underscore-dangle
 const getAllFileAndFolderPaths = cli.__get__('getAllFileAndFolderPaths') // eslint-disable-line no-underscore-dangle
 

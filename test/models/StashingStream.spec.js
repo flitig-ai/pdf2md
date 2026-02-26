@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 
-const StashingStream = require('../../lib/models/StashingStream')
+const StashingStream = require('../../build/models/StashingStream')
 
 describe('StashingStream', () => {
   it('Simple', () => {

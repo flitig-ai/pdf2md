@@ -1,12 +1,18 @@
 const path = require('path')
-const pdfjs = require('pdfjs-dist')
-pdfjs.GlobalWorkerOptions.workerSrc = `pdfjs-dist/legacy/build/pdf.worker`
 
 const { findPageNumbers, findFirstPage, removePageNumber } = require('./page-number-functions')
 const TextItem = require('../models/TextItem')
 const Page = require('../models/Page')
 
 const NO_OP = () => {}
+
+let _pdfjs = null
+async function loadPdfjs() {
+    if (!_pdfjs) {
+        _pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+    }
+    return _pdfjs
+}
 
 /**
  * Parses the PDF document contained in the provided buffer and invokes callback functions during the parsing process.
@@ -20,6 +26,8 @@ const NO_OP = () => {}
  * @returns {Promise<void>} A promise that resolves when the parsing process is complete.
  */
 exports.parse = async function parse(buffer, callbacks) {
+    const pdfjs = await loadPdfjs()
+
     const { metadataParsed, pageParsed, fontParsed, documentParsed } = {
         metadataParsed: NO_OP,
         pageParsed: NO_OP,
@@ -27,7 +35,8 @@ exports.parse = async function parse(buffer, callbacks) {
         documentParsed: NO_OP,
         ...(callbacks || {})
     }
-    const fontDataPath = path.join(path.resolve(require.resolve('pdfjs-dist'), '../../standard_fonts'), '/')
+    const pdfjsDir = path.dirname(require.resolve('pdfjs-dist/package.json'))
+    const fontDataPath = path.join(pdfjsDir, 'standard_fonts') + '/'
     const pdfDocument = await pdfjs.getDocument({
         data: new Uint8Array(buffer),
         standardFontDataUrl: fontDataPath
@@ -62,13 +71,13 @@ exports.parse = async function parse(buffer, callbacks) {
     for (let j = 1; j <= pdfDocument.numPages; j++) {
         const page = await pdfDocument.getPage(j)
 
-        // Trigger the font retrieval for the page
         await page.getOperatorList()
 
         const scale = 1.0
         const viewport = page.getViewport({ scale })
         let textContent = await page.getTextContent()
-        if (firstPage && page.pageIndex >= firstPage.pageIndex) {
+        const pageIndex = page.pageNumber - 1
+        if (firstPage && pageIndex >= firstPage.pageIndex) {
             textContent = removePageNumber(textContent, pageNum)
             pageNum++
         }
@@ -92,9 +101,7 @@ exports.parse = async function parse(buffer, callbacks) {
         const fontIds = new Set(textItems.map(t => t.font))
         for (const fontId of fontIds) {
             if (!fonts.ids.has(fontId) && fontId.startsWith('g_d')) {
-                // Depending on which build of pdfjs-dist is used, the
-                // WorkerTransport containing the font objects is either transport or _transport
-                const transport = pdfDocument.transport || pdfDocument._transport // eslint-disable-line no-underscore-dangle
+                const transport = pdfDocument._transport // eslint-disable-line no-underscore-dangle
                 const font = await new Promise(resolve => transport.commonObjs.get(fontId, resolve))
                 fonts.ids.add(fontId)
                 fonts.map.set(fontId, font)

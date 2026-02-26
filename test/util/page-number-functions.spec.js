@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const { findPageNumbers, findFirstPage, removePageNumber } = require('../../lib/util/page-number-functions')
+const { findPageNumbers, findFirstPage, removePageNumber } = require('../../build/util/page-number-functions')
 
 describe('functions: findPageNumbers', () => {
   it('searches, coerces and stores page number', () => {

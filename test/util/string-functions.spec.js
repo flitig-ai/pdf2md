@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 
-const { hasUpperCaseCharacterInMiddleOfWord, normalizedCharCodeArray, removeLeadingWhitespaces, removeTrailingWhitespaces, prefixAfterWhitespace, suffixBeforeWhitespace, charCodeArray, isListItem, isNumberedListItem, wordMatch, hasOnly, isListItemCharacter } = require('../../lib/util/string-functions')
+const { hasUpperCaseCharacterInMiddleOfWord, normalizedCharCodeArray, removeLeadingWhitespaces, removeTrailingWhitespaces, prefixAfterWhitespace, suffixBeforeWhitespace, charCodeArray, isListItem, isNumberedListItem, wordMatch, hasOnly, isListItemCharacter } = require('../../build/util/string-functions')
 
 describe('functions: hasUpperCaseCharacterInMiddleOfWord', () => {
   it('single word', () => {
