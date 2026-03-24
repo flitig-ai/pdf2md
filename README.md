@@ -6,6 +6,10 @@ Converts PDF files to Markdown. Accepts a Buffer and returns `Promise<string[]>`
 
 ## Major Changes
 
+[2025-03-24]
+
+1. Bump `pdfjs-dist` to v5.5 which fixes the global variable / simultaneous transcribes fail problem.
+
 [2025-02-26]
 
 1. Bump `pdfjs-dist` from v3 to v5, fixing CVE for arbitrary JS execution in malicious PDFs.
