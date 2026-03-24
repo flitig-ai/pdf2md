@@ -37,9 +37,11 @@ exports.parse = async function parse(buffer, callbacks) {
     }
     const pdfjsDir = path.dirname(require.resolve('pdfjs-dist/package.json'))
     const fontDataPath = path.join(pdfjsDir, 'standard_fonts') + '/'
+    const wasmPath = path.join(pdfjsDir, 'wasm') + '/'
     const pdfDocument = await pdfjs.getDocument({
         data: new Uint8Array(buffer),
-        standardFontDataUrl: fontDataPath
+        standardFontDataUrl: fontDataPath,
+        wasmUrl: wasmPath,
     }).promise
     const metadata = await pdfDocument.getMetadata()
     metadataParsed(metadata)
