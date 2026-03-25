@@ -26,6 +26,9 @@ async function pdf2md(pdfBuffer, callbacks) {
     const { fonts, pages } = result
     const transformations = makeTransformations(fonts.map)
     const parseResult = transform(pages, transformations)
+    if (pdfDocument && typeof pdfDocument.destroy === 'function') {
+        pdfDocument.destroy()                              // ← free all pdfjs-dist caches
+    }
     return parseResult.pages.map(page => page.items.join('\n'))
 }
 
