@@ -73,6 +73,8 @@ exports.parse = async function parse(buffer, callbacks) {
     for (let j = 1; j <= pdfDocument.numPages; j++) {
         const page = await pdfDocument.getPage(j)
 
+        await page.getOperatorList()
+
         const scale = 1.0
         const viewport = page.getViewport({ scale })
         let textContent = await page.getTextContent()
