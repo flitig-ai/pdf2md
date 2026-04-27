@@ -23,7 +23,7 @@ if (typeof document === 'undefined') {
  */
 async function pdf2md(pdfBuffer, callbacks) {
     const result = await parse(pdfBuffer, callbacks)
-    const { fonts, pages } = result
+    const { fonts, pages, pdfDocument } = result
     const transformations = makeTransformations(fonts.map)
     const parseResult = transform(pages, transformations)
     if (pdfDocument && typeof pdfDocument.destroy === 'function') {
