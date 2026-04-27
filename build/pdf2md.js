@@ -26,10 +26,11 @@ async function pdf2md(pdfBuffer, callbacks) {
     const { fonts, pages, pdfDocument } = result
     const transformations = makeTransformations(fonts.map)
     const parseResult = transform(pages, transformations)
+    const markdown = parseResult.pages.map(page => page.items.join('\n'))
     if (pdfDocument && typeof pdfDocument.destroy === 'function') {
-        pdfDocument.destroy()                              // ← free all pdfjs-dist caches
+        await pdfDocument.destroy()
     }
-    return parseResult.pages.map(page => page.items.join('\n'))
+    return markdown
 }
 
 module.exports = pdf2md
