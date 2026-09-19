@@ -24,13 +24,15 @@ if (typeof document === 'undefined') {
 async function pdf2md(pdfBuffer, callbacks) {
     const result = await parse(pdfBuffer, callbacks)
     const { fonts, pages, pdfDocument } = result
-    const transformations = makeTransformations(fonts.map)
-    const parseResult = transform(pages, transformations)
-    const markdown = parseResult.pages.map(page => page.items.join('\n'))
-    if (pdfDocument && typeof pdfDocument.destroy === 'function') {
-        await pdfDocument.destroy()
+    try {
+        const transformations = makeTransformations(fonts.map)
+        const parseResult = transform(pages, transformations)
+        return parseResult.pages.map(page => page.items.join('\n'))
+    } finally {
+        if (pdfDocument && typeof pdfDocument.destroy === 'function') {
+            await pdfDocument.destroy()
+        }
     }
-    return markdown
 }
 
 module.exports = pdf2md

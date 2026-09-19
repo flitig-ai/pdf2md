@@ -48,6 +48,19 @@ exports.parse = async function parse(buffer, callbacks) {
         // pdf.js skip image decoding entirely (it warns once per image and moves on).
         maxImageSize: 0,
     }).promise
+    try {
+        return await parseDocument(pdfjs, pdfDocument, { metadataParsed, pageParsed, fontParsed, documentParsed })
+    } catch (err) {
+        try {
+            await pdfDocument.destroy()
+        } catch (_) {
+            // Ignore cleanup failures; surface the original parse error.
+        }
+        throw err
+    }
+}
+
+async function parseDocument(pdfjs, pdfDocument, { metadataParsed, pageParsed, fontParsed, documentParsed }) {
     const metadata = await pdfDocument.getMetadata()
     metadataParsed(metadata)
 
