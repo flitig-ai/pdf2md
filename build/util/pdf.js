@@ -42,6 +42,11 @@ exports.parse = async function parse(buffer, callbacks) {
         data: new Uint8Array(buffer),
         standardFontDataUrl: fontDataPath,
         wasmUrl: wasmPath,
+        // We only need text and font objects, never pixels. Without this, getOperatorList()
+        // fully decodes every image (sized from the JPEG SOF / dict W×H) and holds the bitmaps
+        // until destroy(); a header that lies about its size can OOM the process. 0 makes
+        // pdf.js skip image decoding entirely (it warns once per image and moves on).
+        maxImageSize: 0,
     }).promise
     const metadata = await pdfDocument.getMetadata()
     metadataParsed(metadata)
