@@ -45,17 +45,14 @@ exports.parse = async function parse(buffer, callbacks) {
         // We only need text and font objects, never pixels. Without this, getOperatorList()
         // fully decodes every image (sized from the JPEG SOF / dict W×H) and holds the bitmaps
         // until destroy(); a header that lies about its size can OOM the process. 0 makes
-        // pdf.js skip image decoding entirely (it warns once per image and moves on).
+        // pdf.js skip image decoding entirely (it logs a warning per image draw and moves on).
         maxImageSize: 0,
     }).promise
     try {
         return await parseDocument(pdfjs, pdfDocument, { metadataParsed, pageParsed, fontParsed, documentParsed })
     } catch (err) {
-        try {
-            await pdfDocument.destroy()
-        } catch (_) {
-            // Ignore cleanup failures; surface the original parse error.
-        }
+        // Ignore cleanup failures so the original parse error is what surfaces.
+        await pdfDocument.destroy().catch(NO_OP)
         throw err
     }
 }
